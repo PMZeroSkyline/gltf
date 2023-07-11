@@ -1,5 +1,5 @@
 # gltf
-Parses a single header file for gltf, depends on the json library (https://github.com/nlohmann/json), compiles with c++11, runs on mac windows android
+Parses a single header file for gltf, depends on the json library (https://github.com/nlohmann/json), compiles with c++11, runs on mac windows android, Deserialisation gltf format.
 
 Constructed based on the rules provided by the official GLTF documentation (https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#introduction-general)
 
