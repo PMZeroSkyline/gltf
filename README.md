@@ -1,5 +1,5 @@
 # gltf
-Parses a single header file for gltf, depends on the json library (https://github.com/nlohmann/json), compiles with c++11, runs on mac windows android, Deserialisation gltf format.
+Parses a single header file for gltf, Deserialization, depends on the json library (https://github.com/nlohmann/json), compiles with c++11, runs on mac windows android, Deserialisation gltf format.
 
 Constructed based on the rules provided by the official GLTF documentation (https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#introduction-general)
 
@@ -46,7 +46,7 @@ int main()
     std::string s;
     std::string path = "mesh/scene.gltf";
     ReadFile(path, s);
-    // Deserialization
+    
     gltf::glTF tf = gltf::Parse(s);
 
     std::cout << tf.asset.version << std::endl;
