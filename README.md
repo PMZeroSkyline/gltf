@@ -46,6 +46,7 @@ int main()
     std::string s;
     std::string path = "mesh/scene.gltf";
     ReadFile(path, s);
+    // Deserialization
     gltf::glTF tf = gltf::Parse(s);
 
     std::cout << tf.asset.version << std::endl;
