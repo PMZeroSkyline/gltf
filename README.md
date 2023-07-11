@@ -5,6 +5,7 @@ Constructed based on the rules provided by the official GLTF documentation (http
 
 ```
 #include <string>
+#include <iostream>
 #include "gltf.h"
 
 void ReadFile(const std::string &path, std::string &contents)
@@ -21,12 +22,54 @@ void ReadFile(const std::string &path, std::string &contents)
 	}
 	throw(errno);
 }
+template<typename T>
+void ReadVector(const std::string &path, int beg, int count, std::vector<T> &contents)
+{
+	FILE *fp = fopen(path.c_str(), "rb");
+	if (fp)
+	{
+		fseek(fp, beg, SEEK_SET);
+		contents.resize(count);
+		fread(&contents[0], sizeof(T), count, fp);
+		fclose(fp);
+		return;
+	}
+	throw(errno);
+}
+struct vec3
+{
+    float x, y, z;
+};
 int main()
 {
     std::string s;
-    ReadFile("scene.json", s);
+    std::string path = "mesh/scene.gltf";
+    ReadFile(path, s);
     gltf::glTF tf = gltf::Parse(s);
 
+    std::cout << tf.asset.version << std::endl;
+    
+    size_t found = path.find_last_of("/\\");
+    std::string dir = path.substr(0, found != std::string::npos ? found + 1 : 0);
+
+    if (tf.meshes.size())
+    {
+        gltf::Mesh mesh = tf.meshes[0];
+        for (const auto& attr : mesh.primitives[0].attributes)
+        {
+            if (attr.first == "POSITION")
+            {
+                std::vector<vec3> position;
+                gltf::AccessResult result = gltf::Access(tf, attr.second);
+                ReadVector(dir+result.buffer->uri, result.accessor->byteOffset+result.bufferView->byteOffset, result.accessor->count, position);
+                for (const vec3& v : position)
+                {
+                    std::cout << "x: " << v.x << " y: " << v.y << " z: " << v.z << std::endl;
+                }
+                
+            }
+        }
+    }
     return 0;
 }
 ```
